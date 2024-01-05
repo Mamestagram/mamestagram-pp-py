@@ -1,4 +1,14 @@
-# akatsuki-pp-py
+# mamestagram-pp-py
+
+## 既存のakatsuki-pp-pyをアンインストール後以下の作業を実行する
+
+```
+sudo apt-get install rustc cargo
+```
+
+```
+pip install git+https://github.com/Mamestagram/mamestagram-pp-py
+```
 
 Difficulty and performance calculation for all [osu!](https://osu.ppy.sh/) modes.
 
