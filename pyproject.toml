@@ -23,5 +23,5 @@ authors = [
 ]
 readme = "README.md"
 license = { file = "LICENSE" }
-repository = "https://github.com/osuAkatsuki/akatsuki-pp-py"
+repository = "https://github.com/Mamestagram/mamestagram-pp-py"
 keywords = ["osu", "pp", "stars", "performance", "difficulty"]
