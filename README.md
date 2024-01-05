@@ -10,7 +10,8 @@ sudo apt-get install rustc cargo
 pip install git+https://github.com/Mamestagram/mamestagram-pp-py
 ```
 
-Difficulty and performance calculation for all [osu!](https://osu.ppy.sh/) modes.
+## mamestagram-pp-pyとは
+Difficulty and performance calculation for all [osu!](https://osu.ppy.sh/) modes for mamestagram.
 
 This is a python binding to the Rust library [rosu-pp](https://github.com/MaxOhn/rosu-pp) which was bootstrapped through [PyO3](https://github.com/PyO3/PyO3).
 Since all the heavy lifting is done by Rust, rosu-pp-py comes with a very fast performance.
