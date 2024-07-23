@@ -5,7 +5,7 @@ version = 3
 [[package]]
 name = "akatsuki-pp"
 version = "0.9.6"
-source = "git+https://github.com/Mamestagram/mamestagram-pp-rs?rev=c05c613220b3401c03f1c244ecc781a3c3f859b1"
+source = "git+https://github.com/Mamestagram/mamestagram-pp-rs?rev=a42bfea12da319046c3fd7df5e95c8c66e20acb9"
 
 [[package]]
 name = "akatsuki-pp-py"
