@@ -12,7 +12,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 pyo3 = { version = "0.17", features = ["extension-module", "macros"] }
-akatsuki-pp = { git = "https://github.com/Mamestagram/mamestagram-pp-rs", rev = "c05c613220b3401c03f1c244ecc781a3c3f859b1" }
+akatsuki-pp = { git = "https://github.com/Mamestagram/mamestagram-pp-rs", rev = "a42bfea12da319046c3fd7df5e95c8c66e20acb9" }
 
 [profile.release]
 lto = "fat"
