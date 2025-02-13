@@ -86,6 +86,7 @@ impl Debug for BorrowedDifficultyAttributes<'_> {
                     ar,
                     od,
                     hp,
+                    cs: _,
                     n_circles,
                     n_sliders,
                     n_spinners,

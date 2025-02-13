@@ -263,6 +263,7 @@ impl PyCalculator {
                 ar: attrs.difficulty.ar,
                 od: attrs.difficulty.od,
                 hp: attrs.difficulty.hp,
+                cs: attrs.difficulty.cs,
                 n_circles: attrs.difficulty.n_circles,
                 n_sliders: attrs.difficulty.n_sliders,
                 n_spinners: attrs.difficulty.n_spinners,
