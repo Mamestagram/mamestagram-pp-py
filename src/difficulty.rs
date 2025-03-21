@@ -4,7 +4,7 @@ use pyo3::{
     types::{PyAnyMethods, PyDict},
     Bound, PyResult,
 };
-use rosu_pp::Difficulty;
+use mames_pp::Difficulty;
 
 use crate::{
     attributes::difficulty::PyDifficultyAttributes,

@@ -4,7 +4,7 @@ use pyo3::{
     types::{PyAnyMethods, PyDict},
     Bound, PyAny, PyRef, PyResult,
 };
-use rosu_pp::{
+use mames_pp::{
     any::{DifficultyAttributes, HitResultPriority},
     Difficulty, Performance,
 };

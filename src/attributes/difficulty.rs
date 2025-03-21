@@ -1,5 +1,5 @@
 use pyo3::{pyclass, PyErr};
-use rosu_pp::{
+use mames_pp::{
     any::DifficultyAttributes, catch::CatchDifficultyAttributes, mania::ManiaDifficultyAttributes,
     osu::OsuDifficultyAttributes, taiko::TaikoDifficultyAttributes,
 };

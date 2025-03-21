@@ -1,5 +1,5 @@
 use pyo3::pyclass;
-use rosu_pp::{
+use mames_pp::{
     any::Strains, catch::CatchStrains, mania::ManiaStrains, osu::OsuStrains, taiko::TaikoStrains,
 };
 

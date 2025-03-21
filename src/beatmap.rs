@@ -6,7 +6,7 @@ use pyo3::{
     types::{PyAnyMethods, PyDict},
     Bound, PyResult,
 };
-use rosu_pp::{
+use mames_pp::{
     model::{hit_object::HitObjectKind, mode::GameMode},
     Beatmap, GameMods,
 };

@@ -6,7 +6,7 @@ use pyo3::{
     types::{PyAnyMethods, PyDict},
     Bound, PyResult,
 };
-use rosu_pp::any::ScoreState;
+use mames_pp::any::ScoreState;
 
 use crate::error::ArgsError;
 

@@ -1,5 +1,5 @@
 use pyo3::{pyclass, pymethods, PyRef};
-use rosu_pp::GradualDifficulty;
+use mames_pp::GradualDifficulty;
 
 use crate::{
     attributes::difficulty::PyDifficultyAttributes, beatmap::PyBeatmap, difficulty::PyDifficulty,
