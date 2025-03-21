@@ -1,20 +1,25 @@
 [package]
-name = "akatsuki-pp-py"
-version = "1.0.0"
-description = "osu! difficulty and pp calculation for all modes"
-authors = ["Max Ohn <ohn.m@hotmail.de>", "tsunyoku <tsunyoku@gmail.com>"]
-license = "MIT"
+name = "rosu-pp-py"
+version = "2.0.1"
 edition = "2021"
+authors = ["Max Ohn <ohn.m@hotmail.de>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/MaxOhn/rosu-pp-py"
+description = "Difficulty and performance calculation for osu!"
 
 [lib]
-name = "akatsuki_pp_py"
+name = "rosu_pp_py"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = { version = "0.17", features = ["extension-module", "macros"] }
-akatsuki-pp = { git = "https://github.com/Mamestagram/mamestagram-pp-rs", rev = "a05fc758b834ccfce1b0a22422e5eebbe45e9d78" }
+pyo3 = { version = "0.24", features = ["extension-module", "macros"] }
+rosu-mods = { version = "0.2.0", default-features = false, features = ["serde"] }
+rosu-pp = { version = "2.0.0", features = ["sync"] }
+serde = { version = "1.0.203" }
 
 [profile.release]
-lto = "fat"
+lto = true
+panic = "abort"
 codegen-units = 1
-strip = "debuginfo"
+strip = true
