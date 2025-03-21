@@ -1,111 +1,186 @@
-# mamestagram-pp-py
+# rosu-pp-py
 
-## 既存のakatsuki-pp-pyをアンインストール後以下の作業を実行する
+Library to calculate difficulty and performance attributes for all [osu!] modes.
 
-```
-sudo apt-get install rustc cargo
-```
+This is a python binding to the [Rust] library [rosu-pp] which was bootstrapped through [PyO3].
+As such, its performance is much faster than a native python library.
 
-```
-pip install git+https://github.com/Mamestagram/mamestagram-pp-py
-```
+## Usage
 
-## mamestagram-pp-pyとは
-Difficulty and performance calculation for all [osu!](https://osu.ppy.sh/) modes for mamestagram.
-
-This is a python binding to the Rust library [rosu-pp](https://github.com/MaxOhn/rosu-pp) which was bootstrapped through [PyO3](https://github.com/PyO3/PyO3).
-Since all the heavy lifting is done by Rust, rosu-pp-py comes with a very fast performance.
-Check out rosu-pp's [README](https://github.com/MaxOhn/rosu-pp/blob/main/README.md) for more info.
-
-## Exposed types
-
-The library exposes the following classes:
-
-- `Calculator`: Contains various parameters to calculate strains or map, difficulty, or performance attributes
-- `Beatmap`: Contains a parsed beatmap
-- [`BeatmapAttributes`](https://github.com/MaxOhn/rosu-pp-py/blob/81e1d6f28064b832661a4940a3896a2089f76b6b/rosu_pp_py.pyi#L199-L231): Contains various attributes about the map itself
-- [`DifficultyAttributes`](https://github.com/MaxOhn/rosu-pp-py/blob/81e1d6f28064b832661a4940a3896a2089f76b6b/rosu_pp_py.pyi#L234-L284): Contains various attributes about the difficulty based on the mode
-- [`PerformanceAttributes`](https://github.com/MaxOhn/rosu-pp-py/blob/81e1d6f28064b832661a4940a3896a2089f76b6b/rosu_pp_py.pyi#L287-L313): Contains various attributes about the performance and difficulty based on the mode
-- [`Strains`](https://github.com/MaxOhn/rosu-pp-py/blob/81e1d6f28064b832661a4940a3896a2089f76b6b/rosu_pp_py.pyi#L316-L346): Contains strain values for each skill based on the mode
-
-Additionally, the following error types are exposed:
-- `ParseError`: Failed to parse a beatmap
-- `KwargsError`: Invalid kwargs were provided
-
-## How to use akatsuki-pp-py
-
-1) The first step is to create a new `Beatmap` instance by providing appropriate kwargs.
-Either of the kwargs `path`, `content`, or `bytes` **must** be given. The kwargs `ar`, `cs`, `hp`, and `od` are optional.
-With the setters `set_ar`, `set_cs`, `set_hp`, and `set_od` you can specify custom attributes.
-```py
-map = Beatmap(path = "/path/to/file.osu", ar = 9.87)
-map.set_od(1.23)
-
-with open("/path/to/file.osu", "rb") as file:
-    map = Beatmap(bytes = file.read())
-
-with open("/path/to/file.osu") as file:
-    map = Beatmap(content = file.read())
-```
-
-2) Next, you need to create an instance of `Calculator` by providing the appropriate kwargs again.
-Any of the following kwargs are allowed: `mode`, `mods`, `acc`, `n_geki`, `n_katu`, `n300`, `n100`, `n50`, `n_misses`, `combo`, `passed_objects`, `clock_rate`, and `difficulty`.
-Each of these also have a setter method e.g. `set_n_misses`.
-```py
-calc = Calculator(mode = 2, acc = 98.76)
-calc.set_mods(8 + 64) # HDDT
-```
-
-3) The last step is to call any of the methods `map_attributes`, `difficulty`, `performance`, or `strains` on the calculator and provide them a `Beatmap`.
+The library exposes multiple classes:
+- [`Beatmap`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L30-L108): Parsed `.osu` file
+- [`GameMode`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L12-L20)
+- Calculators
+  - [`Difficulty`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L110-L274): Class to calculate difficulty attributes, strains, or create gradual calculators
+  - [`Performance`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L276-L506): Performance attributes calculator
+  - [`GradualDifficulty`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L508-L532): Calculator to calculate difficulty attributes after each hitobject
+  - [`GradualPerformance`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L534-L560): Calculator to calculator performance attributes after each hitresult
+  - [`BeatmapAttributesBuilder`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L562-L693): Beatmap attributes calculator
+- Results
+  - [`DifficultyAttributes`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L769-L1011)
+  - [`Strains`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L1094-L1170): Strain values of a difficulty calculation, suitable to plot difficulty over time
+  - [`PerformanceAttributes`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L1013-L1092)
+  - [`BeatmapAttributes`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L1172-L1210)
+- [`HitResultPriority`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L22-L28): Passed to `Performance`, decides whether specified accuracy should be realized through good or bad hitresults
+- [`ScoreState`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L695-L767): Hitresults and max combo of a score, found in `PerformanceAttributes` and passed to gradual calculators
 
 ## Example
 
+### Calculating performance
+
 ```py
-from akatsuki_pp_py import Beatmap, Calculator
+import rosu_pp_py as rosu
 
-map = Beatmap(path = "./maps/100.osu")
-calc = Calculator(mods = 8)
+# either `path`, `bytes`, or `content` must be specified when parsing a map
+map = rosu.Beatmap(path = "/path/to/file.osu")
 
-# Calculate an SS on HD
-max_perf = calc.performance(map)
+# Optionally convert to a specific mode for optionally given mods
+map.convert(rosu.GameMode.Mania, "6K")
 
-# The mods are still set to HD
-calc.set_acc(99.11)
-calc.set_n_misses(1)
-calc.set_combo(200)
+perf = rosu.Performance(
+    # various kwargs available
+    accuracy = 98.76,
+    misses = 2,
+    combo = 700,
+    hitresult_priority = rosu.HitResultPriority.WorstCase, # favors bad hitresults
+)
 
-# A good way to speed up the calculation is to provide
-# the difficulty attributes of a previous calculation
-# so that they don't need to be recalculated.
-# **Note** that this should only be done if neither
-# the map, mode, mods, nor passed objects amount changed.
-calc.set_difficulty(max_perf.difficulty)
+# Each kwarg can also be specified afterwards through setters
+perf.set_accuracy(99.11) # override previously specified accuracy
+perf.set_mods(8 + 64)    # HDDT
+perf.set_clock_rate(1.4)
 
-curr_perf = calc.performance(map)
-print(f'PP: {curr_perf.pp}/{max_perf.pp} | Stars: {max_perf.difficulty.stars}')
+# Second argument of map attributes specifies whether mods still need to be accounted for
+# `True`: mods already considered; `False`: value should still be adjusted
+perf.set_ar(10.5, True)
+perf.set_od(5, False)
 
-map_attrs = calc.map_attributes(map)
-print(f'BPM: {map_attrs.bpm}')
+# Calculate for the map
+attrs = perf.calculate(map)
 
-strains = calc.strains(map)
-print(f'Maximum aim strain: {max(strains.aim)}')
+# Note that calculating via map will have to calculate difficulty attributes
+# internally which is fairly expensive. To speed it up, you can also pass in
+# previously calculated attributes, but be sure they were calculated for the
+# same difficulty settings like mods, clock rate, custom map attributes, ...
+
+perf.set_accuracy(100)
+perf.set_misses(None)
+perf.set_combo(None)
+
+# Calculate a new set of attributes by re-using previous attributes instead of the map
+max_attrs = perf.calculate(attrs)
+
+print(f'PP: {attrs.pp}/{max_attrs.pp} | Stars: {max_attrs.difficulty.stars}')
+```
+
+### Gradual calculation
+
+```py
+import rosu_pp_py as rosu
+
+# Parsing the map, this time through the `content` kwarg
+with open("/path/to/file.osu") as file:
+    map = rosu.Beatmap(content = file.read())
+
+# Specifying some difficulty parameters
+diff = rosu.Difficulty(
+    mods = 16 + 1024, # HRFL
+    clock_rate = 1.1,
+    ar = 10.2,
+    ar_with_mods = True,
+)
+
+# Gradually calculating *difficulty* attributes
+gradual_diff = diff.gradual_difficulty(map)
+
+for i, attrs in enumerate(gradual_diff, 1):
+    print(f'Stars after {i} hitobjects: {attrs.stars}')
+
+# Gradually calculating *performance* attributes
+gradual_perf = diff.gradual_performance(map)
+i = 1
+
+while True:
+    state = rosu.ScoreState(
+        max_combo = i,
+        n300 = i,
+        n100 = 0,
+        # ...
+    )
+
+    attrs = gradual_perf.next(state)
+
+    if attrs is None:
+        # All hitobjects have been processed
+        break
+
+    print(f'PP: {attrs.pp}')
+    i += 1
+```
+
+## Mods
+
+Wherever mods are specified, their type should coincide with the following alias definition:
+```py
+GameMods = Union[int, str, GameMod, List[Union[GameMod, str, int]]]
+GameMod = dict[str, Union[str, GameModSettings]]
+GameModSettings = dict[str, Union[bool, float, str]]
+```
+
+That means, mods can be given either through their [(legacy) bitflags](https://github.com/ppy/osu-api/wiki#reference),
+a string for acronyms, a "GameMod" `dict`, or a sequence whose items are either
+a "GameMod" `dict`, a single acronym string, or bitflags for a single mod.
+
+A "GameMod" `dict` **must** have the item `'acronym': str` and an optional item `'settings': GameModSettings`.
+
+Some examples for valid mods look as follows:
+
+```py
+mods = 8 + 64              # Hidden, DoubleTime
+mods = "hRNcWIez"          # HardRock, Nightcore, Wiggle, Easy
+mods = { 'acronym': "FI" } # FadeIn
+mods = [
+    1024,
+    'nf',
+    {
+        'acronym': "AC",
+        'settings': {
+            'minimum_accuracy': 95,
+            'restart': True
+        }
+    }
+] # Flashlight, NoFail, AccuracyChallenge
+
+import json
+mods_json = '[{"acronym": "TC"}, {"acronym": "HT", "settings": {"speed_change": 0.6}}]'
+mods = json.loads(mods_json) # Traceable, HalfTime
 ```
 
 ## Installing rosu-pp-py
 
 Installing rosu-pp-py requires a [supported version of Python and Rust](https://github.com/PyO3/PyO3#usage).
 
-Once [Python](https://www.python.org/downloads/) and [Rust](https://www.rust-lang.org/learn/get-started) and ready to go, you can install the project with pip:
+If a [pre-built wheel](https://pypi.org/project/rosu-pp-py/#files) is available for your architecture, you can even skip the Rust part.
+
+Once [Python] and (optionally) [Rust](https://www.rust-lang.org/learn/get-started) are ready to go, you can install the project with pip:
 
 ```sh
-$ pip install akatsuki-pp-py
+$ pip install rosu-pp-py
 ```
+
 or
+
 ```
-$ pip install git+https://github.com/osuAkatsuki/akatsuki-pp-py
+$ pip install git+https://github.com/MaxOhn/rosu-pp-py
 ```
 
 ## Learn More
-- [Rust documentation](https://www.rust-lang.org).
-- [PyO3 documentation](https://pyo3.rs/).
-- [Python documentation](https://docs.python.org/3/).
+- [rosu-pp]
+- [Rust]
+- [PyO3]
+
+[osu!]: https://osu.ppy.sh/home
+[Rust]: https://www.rust-lang.org
+[rosu-pp]: https://github.com/MaxOhn/rosu-pp
+[PyO3]: https://github.com/PyO3/pyo3
+[Python]: https://www.python.org/downloads/

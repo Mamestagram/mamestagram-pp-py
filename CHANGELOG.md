@@ -1,4 +1,80 @@
-# v0.9.1 (2022-10-29)
+# v2.0.1 (2024-12-05)
+
+- Fixed the `lazer` argument not being passed to the calculation ([#12])
+- Fixed the type error when passing mods to `Beatmap.convert` ([#13])
+- The `settings` property for mods can now be `None` ([#13])
+
+## v2.0.0 (2024-12-04)
+
+Updated all modes' difficulty and performance calculation. See osu!'s newspost for more info: <https://osu.ppy.sh/home/news/2024-10-28-performance-points-star-rating-updates>
+
+rosu-pp changelog: <https://github.com/MaxOhn/rosu-pp/blob/main/CHANGELOG.md#v200-2024-12-03>
+
+- __Breaking changes:__
+  - Renamed some properties:
+    - `BeatmapAttributes.od_hit_window` -> `od_great_hit_window`
+    - `DifficultyAttributes.hit_window` -> `great_hit_window`
+    - `BeatmapAttributes.ar_hitwindow` -> `ar_hit_window`
+
+- __Additions:__
+  - `Difficulty` and `Performance` now accept the kwarg `lazer: bool` (defaults to `true` if unspecified);
+    Performance calculation for osu!standard and osu!mania now differs between lazer and stable so this is
+    important to specify.
+  - `Performance` now accepts the kwargs `large_tick_hits: int`, `small_tick_hits: int`, `slider_end_hits: int`;
+    each of them being necessary to specify for osu!standard scores on lazer.
+  - `ScoreState` now has the additional properties
+    - `osu_large_tick_hits: int`
+    - `osu_small_tick_hits: int`
+    - `slider_end_hits: int`
+  - The method `Beatmap.convert` now takes an optional second argument for gamemods
+  - Added the property `BeatmapAttributes.od_ok_hit_window`
+  - Added properties to `DifficultyAttributes`:
+    - `aim_difficult_strain_count` (osu!standard)
+    - `speed_difficult_strain_count` (osu!standard)
+    - `mono_stamina_factor` (osu!taiko)
+    - `n_hold_notes` (osu!mania)
+    - `n_large_ticks` (osu!standard)
+    - `ok_hit_window` (osu!taiko)
+  - Added the property `PerformanceAttributes.estimated_unstable_rate` (osu!taiko)
+  - Added the property `Strains.single_color_stamina` (osu!taiko)
+
+## v1.1.0 (2024-07-12)
+
+- Updated to [rosu-pp v1.1.0](https://github.com/MaxOhn/rosu-pp/blob/main/CHANGELOG.md#v110-2024-07-10)
+- Mods can now be specified through more types than just `int` ([#9]). Instead, it has to coincide with the following alias defintions:
+  ```py
+  GameMods = Union[int, str, GameMod, List[Union[GameMod, str, int]]]
+  GameMod = dict[str, Union[str, GameModSettings]]
+  GameModSettings = dict[str, Union[bool, float, str]]
+  ```
+  That means, mods can be given either through their [(legacy) bitflags](https://github.com/ppy/osu-api/wiki#reference), a string for acronyms, a "GameMod" `dict`, or a sequence whose items are either a "GameMod" `dict`, a single acronym string, or bitflags for a single mod.
+
+  A "GameMod" `dict` **must** have the item `'acronym': str` and an optional item `'settings': GameModSettings`.
+
+## v1.0.1 (2024-05-05)
+
+- `PerformanceAttributes`' field `pp_accuracy` was accidentally actually named `pp_acc`; now it's definitely `pp_accuracy` ([#7])
+
+## v1.0.0 (2024-04-03)
+
+- Updated to [rosu-pp v1.0.0](https://github.com/MaxOhn/rosu-pp/blob/main/CHANGELOG.md#v100-2024-04-02)
+- Breaking changes ahead! There are now multiple different calculators:
+  - `Difficulty` to calculate `DifficultyAttributes`, `Strains`, or create gradual calculators
+  - `Performance` to calculate `PerformanceAttributes`
+  - `BeatmapAttributesBuilder` to calculate `BeatmapAttributes`
+  - `GradualDifficulty` to calculate `DifficultyAttributes` for each hitobject
+  - `GradualPerformance` to calculate `PerformanceAttributes` for each hitresult
+
+## v0.9.4 (2023-02-09)
+
+- Updated to [rosu-pp v0.9.4](https://github.com/MaxOhn/rosu-pp/blob/main/CHANGELOG.md#v094-2023-02-09).
+
+## v0.9.3 (2023-01-28)
+
+- Updated to [rosu-pp v0.9.3](https://github.com/MaxOhn/rosu-pp/blob/main/CHANGELOG.md#v093-2023-01-28). Only includes some bug fixes.
+- Fixed the hitobjects counts of map attributes on converted maps.
+
+## v0.9.1 (2022-10-29)
 
 - Updated to [rosu-pp v0.9.1](https://github.com/MaxOhn/rosu-pp/blob/main/CHANGELOG.md#v091-2022-10-26) including the big changes in [v0.9.0](https://github.com/MaxOhn/rosu-pp/blob/main/CHANGELOG.md#v090-2022-10-24)
 - The binding interface is rewritten completely, see the readme.
@@ -42,3 +118,7 @@ osu!standard, osu!taiko, and osu!mania.
 [@tsunyoku]: https://github.com/tsunyoku
 
 [#3]: https://github.com/MaxOhn/rosu-pp-py/pull/3
+[#7]: https://github.com/MaxOhn/rosu-pp-py/pull/7
+[#9]: https://github.com/MaxOhn/rosu-pp-py/pull/9
+[#12]: https://github.com/MaxOhn/rosu-pp-py/pull/12
+[#13]: https://github.com/MaxOhn/rosu-pp-py/pull/13
