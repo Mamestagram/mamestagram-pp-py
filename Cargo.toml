@@ -14,7 +14,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 pyo3 = { version = "0.24", features = ["extension-module", "macros"] }
-rosu-mods = { version = "0.2.0", default-features = false, features = ["serde"] }
+rosu-mods = { version = "0.3.0", default-features = false, features = ["serde"] }
 mames-pp = { git = "https://github.com/Mamestagram/mamestagram-pp-rs", features = ["sync"] }
 serde = { version = "1.0.203" }
 
