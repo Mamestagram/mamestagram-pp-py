@@ -34,7 +34,7 @@ mod score_state;
 mod strains;
 
 #[pymodule]
-fn rosu_pp_py(py: Python<'_>, m: &Bound<'_, PyModule>) -> PyResult<()> {
+fn mames_pp_py(py: Python<'_>, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<PyBeatmap>()?;
     m.add_class::<PyDifficulty>()?;
     m.add_class::<PyPerformance>()?;

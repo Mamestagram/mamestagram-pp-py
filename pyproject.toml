@@ -3,7 +3,7 @@ requires = ["maturin>=1,<2"]
 build-backend = "maturin"
 
 [project]
-name = "rosu-pp-py"
+name = "mames-pp-py"
 version = "2.0.1"
 requires-python = ">=3.7"
 description = "Difficulty and performance calculation for osu!"
