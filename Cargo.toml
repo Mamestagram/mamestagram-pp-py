@@ -1,5 +1,5 @@
 [package]
-name = "rosu-pp-py"
+name = "mames-pp-py"
 version = "2.0.1"
 edition = "2021"
 authors = ["Max Ohn <ohn.m@hotmail.de>"]
@@ -9,7 +9,7 @@ repository = "https://github.com/Mamestagram/mamestagram-pp-py"
 description = "Difficulty and performance calculation for osu!"
 
 [lib]
-name = "rosu_pp_py"
+name = "mames_pp_py"
 crate-type = ["cdylib"]
 
 [dependencies]
