@@ -36,7 +36,12 @@ impl From<OsuPerformanceAttributes> for PyPerformanceAttributes {
             pp_aim,
             pp_flashlight,
             pp_speed,
+            pp_reading: _,
             effective_miss_count,
+            combo_based_estimated_miss_count: _,
+            score_based_estimated_miss_count: _,
+            aim_estimated_slider_breaks: _,
+            speed_estimated_slider_breaks: _,
             speed_deviation,
         } = attrs;
 

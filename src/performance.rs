@@ -45,6 +45,10 @@ pub struct PyPerformance {
     pub(crate) n100: Option<u32>,
     pub(crate) n50: Option<u32>,
     pub(crate) misses: Option<u32>,
+    /// upstream `OsuLegacyScoreMissCalculator` を有効化する。
+    /// classic (stable v1) score の raw score 値を渡すと、classic slider acc
+    /// かつ ScoreV2 なしの場合に score-based miss 推定が使われる。
+    pub(crate) legacy_total_score: Option<u64>,
     pub(crate) hitresult_priority: PyHitResultPriority,
 }
 
@@ -86,6 +90,7 @@ impl PyPerformance {
                     n100: "int",
                     n50: "int",
                     misses: "int",
+                    legacy_total_score: "int",
                     hitresult_priority: "HitResultPriority",
                 }
             }
@@ -312,6 +317,15 @@ impl PyPerformance {
 
         if let Some(misses) = self.misses {
             perf = perf.misses(misses);
+        }
+
+        // upstream OsuLegacyScoreMissCalculator は Osu path でのみ意味を持つ。
+        // Taiko/Catch/Mania Performance には legacy_total_score setter が無いので
+        // Osu 経路の時だけ apply する。
+        if let Some(legacy_ts) = self.legacy_total_score {
+            if let Performance::Osu(osu) = perf {
+                perf = Performance::Osu(osu.legacy_total_score(legacy_ts));
+            }
         }
 
         let mode = match perf {
