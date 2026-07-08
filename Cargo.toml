@@ -1,3 +1,4 @@
+# This file is part of the Cargo package manager for Rust. It defines the metadata and dependencies for a Rust project.
 [package]
 name = "mames-pp-py"
 version = "2.0.1"
