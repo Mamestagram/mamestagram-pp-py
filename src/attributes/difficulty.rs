@@ -1,8 +1,8 @@
-use pyo3::{pyclass, PyErr};
 use mames_pp::{
     any::DifficultyAttributes, catch::CatchDifficultyAttributes, mania::ManiaDifficultyAttributes,
     osu::OsuDifficultyAttributes, taiko::TaikoDifficultyAttributes,
 };
+use pyo3::{pyclass, PyErr};
 
 use crate::{error::ParseError, mode::PyGameMode};
 
@@ -30,6 +30,7 @@ define_class! {
         pub reading: f64?,
         pub rhythm: f64?,
         pub color: f64?,
+        pub mechanical_difficulty: f64?,
         pub n_fruits: u32?,
         pub n_droplets: u32?,
         pub n_tiny_droplets: u32?,
@@ -40,6 +41,8 @@ define_class! {
         pub ok_hit_window: f64?,
         pub meh_hit_window: f64?,
         pub mono_stamina_factor: f64?,
+        pub stamina_top_strains: f64?,
+        pub consistency_factor: f64?,
         // upstream OsuLegacyScoreMissCalculator 用の attributes (osu のみ)。
         pub aim_top_weighted_slider_factor: f64?,
         pub speed_top_weighted_slider_factor: f64?,
@@ -126,9 +129,9 @@ impl From<TaikoDifficultyAttributes> for PyDifficultyAttributes {
             great_hit_window,
             ok_hit_window,
             mono_stamina_factor,
-            mechanical_difficulty: _,
-            stamina_top_strains: _,
-            consistency_factor: _,
+            mechanical_difficulty,
+            stamina_top_strains,
+            consistency_factor,
             stars,
             max_combo,
             is_convert,
@@ -145,6 +148,9 @@ impl From<TaikoDifficultyAttributes> for PyDifficultyAttributes {
             great_hit_window: Some(great_hit_window),
             ok_hit_window: Some(ok_hit_window),
             mono_stamina_factor: Some(mono_stamina_factor),
+            mechanical_difficulty: Some(mechanical_difficulty),
+            stamina_top_strains: Some(stamina_top_strains),
+            consistency_factor: Some(consistency_factor),
             max_combo,
             ..Self::default()
         }
@@ -236,6 +242,7 @@ impl TryFrom<PyDifficultyAttributes> for DifficultyAttributes {
             reading,
             rhythm,
             color,
+            mechanical_difficulty,
             n_fruits,
             n_droplets,
             n_tiny_droplets,
@@ -246,6 +253,8 @@ impl TryFrom<PyDifficultyAttributes> for DifficultyAttributes {
             ok_hit_window,
             meh_hit_window,
             mono_stamina_factor,
+            stamina_top_strains,
+            consistency_factor,
             aim_top_weighted_slider_factor,
             speed_top_weighted_slider_factor,
             reading_difficult_note_count,
@@ -301,8 +310,10 @@ impl TryFrom<PyDifficultyAttributes> for DifficultyAttributes {
                         flashlight,
                         reading: reading.unwrap_or(0.0),
                         slider_factor,
-                        aim_top_weighted_slider_factor: aim_top_weighted_slider_factor.unwrap_or(0.0),
-                        speed_top_weighted_slider_factor: speed_top_weighted_slider_factor.unwrap_or(0.0),
+                        aim_top_weighted_slider_factor: aim_top_weighted_slider_factor
+                            .unwrap_or(0.0),
+                        speed_top_weighted_slider_factor: speed_top_weighted_slider_factor
+                            .unwrap_or(0.0),
                         speed_note_count,
                         aim_difficult_strain_count,
                         speed_difficult_strain_count,
@@ -333,6 +344,9 @@ impl TryFrom<PyDifficultyAttributes> for DifficultyAttributes {
                     Some(great_hit_window),
                     Some(ok_hit_window),
                     Some(mono_stamina_factor),
+                    Some(mechanical_difficulty),
+                    Some(stamina_top_strains),
+                    Some(consistency_factor),
                 ) = (
                     stamina,
                     reading,
@@ -341,6 +355,9 @@ impl TryFrom<PyDifficultyAttributes> for DifficultyAttributes {
                     great_hit_window,
                     ok_hit_window,
                     mono_stamina_factor,
+                    mechanical_difficulty,
+                    stamina_top_strains,
+                    consistency_factor,
                 ) {
                     return Ok(Self::Taiko(TaikoDifficultyAttributes {
                         stamina,
@@ -350,9 +367,9 @@ impl TryFrom<PyDifficultyAttributes> for DifficultyAttributes {
                         great_hit_window,
                         ok_hit_window,
                         mono_stamina_factor,
-                        mechanical_difficulty: 0.0,
-                        stamina_top_strains: 0.0,
-                        consistency_factor: 0.0,
+                        mechanical_difficulty,
+                        stamina_top_strains,
+                        consistency_factor,
                         stars,
                         max_combo,
                         is_convert,

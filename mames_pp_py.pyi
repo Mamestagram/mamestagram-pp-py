@@ -988,10 +988,34 @@ class DifficultyAttributes:
         """
 
     @property
+    def mechanical_difficulty(self) -> Optional[float]:
+        """
+        The combined mechanical difficulty before consistency scaling.
+
+        Only available for osu!taiko.
+        """
+
+    @property
     def mono_stamina_factor(self) -> Optional[float]:
         """
         Ratio of mono-stamina difficulty to total stamina difficulty.
         
+        Only available for osu!taiko.
+        """
+
+    @property
+    def stamina_top_strains(self) -> Optional[float]:
+        """
+        The weighted contribution of the highest stamina strains.
+
+        Only available for osu!taiko.
+        """
+
+    @property
+    def consistency_factor(self) -> Optional[float]:
+        """
+        The consistency scaling applied to mechanical difficulty.
+
         Only available for osu!taiko.
         """
 
