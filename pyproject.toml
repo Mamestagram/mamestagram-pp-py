@@ -5,7 +5,7 @@ build-backend = "maturin"
 [project]
 name = "mames-pp-py"
 version = "2.0.1"
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 description = "Difficulty and performance calculation for osu!"
 classifiers = [
     "Intended Audience :: Developers",
@@ -21,4 +21,4 @@ license = { file = "LICENSE" }
 keywords = ["osu", "pp", "stars", "performance", "difficulty"]
 
 [tool.maturin]
-features = ["pyo3/extension-module", "pyo3/generate-import-lib"]
+features = ["pyo3/extension-module"]

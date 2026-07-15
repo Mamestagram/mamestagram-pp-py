@@ -14,7 +14,7 @@ macro_rules! define_class {
             $( $field_vis:vis $field:ident: $ty:ident $ty_type:tt , )*
         }
     ) => {
-        #[pyclass(name = $py_name $(, $py_meta )* )]
+        #[pyclass(from_py_object, name = $py_name $(, $py_meta )* )]
         $( #[ $struct_meta ] )*
         $struct_vis struct $name {
             $(

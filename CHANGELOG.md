@@ -1,3 +1,10 @@
+# Unreleased
+
+- Updated the Rust core to `mamestagram-pp-rs` commit `e08d6457`.
+- Added Python 3.14 support by updating to PyO3 0.29; Python 3.8 is now the minimum supported version.
+- Exposed osu!standard reading PP, legacy score miss estimates, and estimated slider breaks.
+- Added `Performance.set_legacy_total_score` and synchronized the type stub with the runtime API.
+
 # v2.0.1 (2024-12-05)
 
 - Fixed the `lazer` argument not being passed to the calculation ([#12])

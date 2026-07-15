@@ -1,48 +1,49 @@
-# rosu-pp-py
+# mames-pp-py
 
 Library to calculate difficulty and performance attributes for all [osu!] modes.
 
-This is a python binding to the [Rust] library [rosu-pp] which was bootstrapped through [PyO3].
+This is a Python binding to the [Rust] library [mames-pp] which was bootstrapped through [PyO3].
 As such, its performance is much faster than a native python library.
 
 ## Usage
 
-The library exposes multiple classes:
-- [`Beatmap`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L30-L108): Parsed `.osu` file
-- [`GameMode`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L12-L20)
+The library exposes multiple classes. See [`mames_pp_py.pyi`](./mames_pp_py.pyi) for the complete typed API.
+
+- `Beatmap`: Parsed `.osu` file
+- `GameMode`
 - Calculators
-  - [`Difficulty`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L110-L274): Class to calculate difficulty attributes, strains, or create gradual calculators
-  - [`Performance`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L276-L506): Performance attributes calculator
-  - [`GradualDifficulty`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L508-L532): Calculator to calculate difficulty attributes after each hitobject
-  - [`GradualPerformance`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L534-L560): Calculator to calculator performance attributes after each hitresult
-  - [`BeatmapAttributesBuilder`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L562-L693): Beatmap attributes calculator
+  - `Difficulty`: Calculates difficulty attributes, strains, or gradual calculators
+  - `Performance`: Calculates performance attributes
+  - `GradualDifficulty`: Calculates difficulty attributes after each hit object
+  - `GradualPerformance`: Calculates performance attributes after each hit result
+  - `BeatmapAttributesBuilder`: Calculates beatmap attributes
 - Results
-  - [`DifficultyAttributes`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L769-L1011)
-  - [`Strains`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L1094-L1170): Strain values of a difficulty calculation, suitable to plot difficulty over time
-  - [`PerformanceAttributes`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L1013-L1092)
-  - [`BeatmapAttributes`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L1172-L1210)
-- [`HitResultPriority`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L22-L28): Passed to `Performance`, decides whether specified accuracy should be realized through good or bad hitresults
-- [`ScoreState`](https://github.com/MaxOhn/rosu-pp-py/blob/5c7c2f90dd904d01ec163a9a26b2efcb525db13a/rosu_pp_py.pyi#L695-L767): Hitresults and max combo of a score, found in `PerformanceAttributes` and passed to gradual calculators
+  - `DifficultyAttributes`
+  - `Strains`: Strain values suitable for plotting difficulty over time
+  - `PerformanceAttributes`
+  - `BeatmapAttributes`
+- `HitResultPriority`: Controls how generated hit results realize specified accuracy
+- `ScoreState`: Hit results and max combo passed to gradual calculators
 
 ## Example
 
 ### Calculating performance
 
 ```py
-import rosu_pp_py as rosu
+import mames_pp_py as mames
 
 # either `path`, `bytes`, or `content` must be specified when parsing a map
-map = rosu.Beatmap(path = "/path/to/file.osu")
+map = mames.Beatmap(path = "/path/to/file.osu")
 
 # Optionally convert to a specific mode for optionally given mods
-map.convert(rosu.GameMode.Mania, "6K")
+map.convert(mames.GameMode.Mania, "6K")
 
-perf = rosu.Performance(
+perf = mames.Performance(
     # various kwargs available
     accuracy = 98.76,
     misses = 2,
     combo = 700,
-    hitresult_priority = rosu.HitResultPriority.WorstCase, # favors bad hitresults
+    hitresult_priority = mames.HitResultPriority.WorstCase, # favors bad hitresults
 )
 
 # Each kwarg can also be specified afterwards through setters
@@ -76,14 +77,14 @@ print(f'PP: {attrs.pp}/{max_attrs.pp} | Stars: {max_attrs.difficulty.stars}')
 ### Gradual calculation
 
 ```py
-import rosu_pp_py as rosu
+import mames_pp_py as mames
 
 # Parsing the map, this time through the `content` kwarg
 with open("/path/to/file.osu") as file:
-    map = rosu.Beatmap(content = file.read())
+    map = mames.Beatmap(content = file.read())
 
 # Specifying some difficulty parameters
-diff = rosu.Difficulty(
+diff = mames.Difficulty(
     mods = 16 + 1024, # HRFL
     clock_rate = 1.1,
     ar = 10.2,
@@ -101,7 +102,7 @@ gradual_perf = diff.gradual_performance(map)
 i = 1
 
 while True:
-    state = rosu.ScoreState(
+    state = mames.ScoreState(
         max_combo = i,
         n300 = i,
         n100 = 0,
@@ -156,31 +157,24 @@ mods_json = '[{"acronym": "TC"}, {"acronym": "HT", "settings": {"speed_change": 
 mods = json.loads(mods_json) # Traceable, HalfTime
 ```
 
-## Installing rosu-pp-py
+## Installing mames-pp-py
 
-Installing rosu-pp-py requires a [supported version of Python and Rust](https://github.com/PyO3/PyO3#usage).
+Installing mames-pp-py requires Python 3.8 or newer and a [supported version of Rust](https://github.com/PyO3/PyO3#usage).
+CPython 3.14 is supported.
 
-If a [pre-built wheel](https://pypi.org/project/rosu-pp-py/#files) is available for your architecture, you can even skip the Rust part.
-
-Once [Python] and (optionally) [Rust](https://www.rust-lang.org/learn/get-started) are ready to go, you can install the project with pip:
+Once [Python] and [Rust](https://www.rust-lang.org/learn/get-started) are ready to go, install directly from this repository:
 
 ```sh
-$ pip install rosu-pp-py
-```
-
-or
-
-```
-$ pip install git+https://github.com/MaxOhn/rosu-pp-py
+$ pip install git+https://github.com/Mamestagram/mamestagram-pp-py
 ```
 
 ## Learn More
-- [rosu-pp]
+- [mames-pp]
 - [Rust]
 - [PyO3]
 
 [osu!]: https://osu.ppy.sh/home
 [Rust]: https://www.rust-lang.org
-[rosu-pp]: https://github.com/MaxOhn/rosu-pp
+[mames-pp]: https://github.com/Mamestagram/mamestagram-pp-rs
 [PyO3]: https://github.com/PyO3/pyo3
 [Python]: https://www.python.org/downloads/

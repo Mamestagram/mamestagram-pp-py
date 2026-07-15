@@ -1,9 +1,9 @@
 use std::fmt::{Debug, Formatter, Result as FmtResult};
 
-use pyo3::pyclass;
 use mames_pp::model::mode::GameMode;
+use pyo3::pyclass;
 
-#[pyclass(eq, eq_int, name = "GameMode")]
+#[pyclass(from_py_object, eq, eq_int, name = "GameMode")]
 #[derive(Copy, Clone, Default, PartialEq)]
 pub enum PyGameMode {
     #[default]

@@ -1,13 +1,13 @@
+use mames_pp::{
+    any::{DifficultyAttributes, HitResultPriority},
+    model::mode::GameMode,
+    Difficulty, Performance,
+};
 use pyo3::{
     exceptions::PyTypeError,
     pyclass, pymethods,
     types::{PyAnyMethods, PyDict},
     Bound, Py, PyAny, PyRef, PyResult, Python,
-};
-use mames_pp::{
-    any::{DifficultyAttributes, HitResultPriority},
-    model::mode::GameMode,
-    Difficulty, Performance,
 };
 
 use crate::{
@@ -267,6 +267,11 @@ impl PyPerformance {
         self.misses = misses;
     }
 
+    #[pyo3(signature = (legacy_total_score=None))]
+    fn set_legacy_total_score(&mut self, legacy_total_score: Option<u64>) {
+        self.legacy_total_score = legacy_total_score;
+    }
+
     #[pyo3(signature = (hitresult_priority=None))]
     fn set_hitresult_priority(&mut self, hitresult_priority: Option<PyHitResultPriority>) {
         self.hitresult_priority = hitresult_priority.unwrap_or_default();
@@ -388,7 +393,7 @@ impl PyPerformance {
     }
 }
 
-#[pyclass(eq, eq_int, name = "HitResultPriority")]
+#[pyclass(from_py_object, eq, eq_int, name = "HitResultPriority")]
 #[derive(Copy, Clone, Default, PartialEq)]
 pub enum PyHitResultPriority {
     #[default]

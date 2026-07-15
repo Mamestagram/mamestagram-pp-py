@@ -1,16 +1,16 @@
 use std::fmt::{Debug, Display, Formatter, Result as FmtResult};
 
+use mames_pp::any::ScoreState;
 use pyo3::{
     exceptions::PyTypeError,
     pyclass,
     types::{PyAnyMethods, PyDict},
     Bound, PyResult,
 };
-use mames_pp::any::ScoreState;
 
 use crate::error::ArgsError;
 
-#[pyclass(name = "ScoreState")]
+#[pyclass(from_py_object, name = "ScoreState")]
 #[derive(Clone, Default)]
 pub struct PyScoreState {
     #[pyo3(get, set)]

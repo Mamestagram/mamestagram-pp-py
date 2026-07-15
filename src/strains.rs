@@ -1,7 +1,7 @@
-use pyo3::pyclass;
 use mames_pp::{
     any::Strains, catch::CatchStrains, mania::ManiaStrains, osu::OsuStrains, taiko::TaikoStrains,
 };
+use pyo3::pyclass;
 
 use crate::mode::PyGameMode;
 
@@ -9,7 +9,7 @@ type DoubleList = Vec<f64>;
 
 define_class! {
     #[pyclass(name = "Strains", frozen)]
-    #[derive(Default)]
+    #[derive(Clone, Default)]
     pub struct PyStrains {
         pub mode: PyGameMode!,
         pub section_length: f64!,

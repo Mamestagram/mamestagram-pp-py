@@ -1,9 +1,9 @@
-use pyo3::pyclass;
 use mames_pp::{
     any::PerformanceAttributes, catch::CatchPerformanceAttributes,
     mania::ManiaPerformanceAttributes, osu::OsuPerformanceAttributes,
     taiko::TaikoPerformanceAttributes,
 };
+use pyo3::pyclass;
 
 use crate::score_state::PyScoreState;
 
@@ -19,8 +19,13 @@ define_class! {
         pub pp_aim: f64?,
         pub pp_flashlight: f64?,
         pub pp_speed: f64?,
+        pub pp_reading: f64?,
         pub pp_accuracy: f64?,
         pub effective_miss_count: f64?,
+        pub combo_based_estimated_miss_count: f64?,
+        pub score_based_estimated_miss_count: f64?,
+        pub aim_estimated_slider_breaks: f64?,
+        pub speed_estimated_slider_breaks: f64?,
         pub speed_deviation: f64?,
         pub estimated_unstable_rate: f64?,
         pub pp_difficulty: f64?,
@@ -36,12 +41,12 @@ impl From<OsuPerformanceAttributes> for PyPerformanceAttributes {
             pp_aim,
             pp_flashlight,
             pp_speed,
-            pp_reading: _,
+            pp_reading,
             effective_miss_count,
-            combo_based_estimated_miss_count: _,
-            score_based_estimated_miss_count: _,
-            aim_estimated_slider_breaks: _,
-            speed_estimated_slider_breaks: _,
+            combo_based_estimated_miss_count,
+            score_based_estimated_miss_count,
+            aim_estimated_slider_breaks,
+            speed_estimated_slider_breaks,
             speed_deviation,
         } = attrs;
 
@@ -52,7 +57,12 @@ impl From<OsuPerformanceAttributes> for PyPerformanceAttributes {
             pp_aim: Some(pp_aim),
             pp_flashlight: Some(pp_flashlight),
             pp_speed: Some(pp_speed),
+            pp_reading: Some(pp_reading),
             effective_miss_count: Some(effective_miss_count),
+            combo_based_estimated_miss_count: Some(combo_based_estimated_miss_count),
+            score_based_estimated_miss_count,
+            aim_estimated_slider_breaks: Some(aim_estimated_slider_breaks),
+            speed_estimated_slider_breaks: Some(speed_estimated_slider_breaks),
             speed_deviation,
             ..Self::default()
         }

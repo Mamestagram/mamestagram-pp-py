@@ -396,6 +396,11 @@ class Performance:
             Irrelevant for osu!taiko.
         `'misses': int`
             Specify the amount of misses of a play.
+        `'legacy_total_score': int`
+            Specify the raw score of a classic osu!standard play.
+
+            When slider accuracy is disabled and ScoreV2 is not active, this
+            enables lazer-compatible score-based miss estimation.
         `'hitresult_priority': HitResultPriority`
             Specify how hitresults should be generated.
             
@@ -502,6 +507,8 @@ class Performance:
     def set_n50(self, n50: Optional[int]) -> None: ...
 
     def set_misses(self, misses: Optional[int]) -> None: ...
+
+    def set_legacy_total_score(self, legacy_total_score: Optional[int]) -> None: ...
 
     def set_hitresult_priority(self, hitresult_priority: Optional[HitResultPriority]) -> None: ...
 
@@ -814,6 +821,14 @@ class DifficultyAttributes:
         """
 
     @property
+    def reading(self) -> Optional[float]:
+        """
+        The difficulty of the reading skill.
+
+        Only available for osu! and osu!taiko.
+        """
+
+    @property
     def flashlight(self) -> Optional[float]:
         """
         The difficulty of the flashlight skill.
@@ -846,10 +861,58 @@ class DifficultyAttributes:
         """
 
     @property
+    def aim_top_weighted_slider_factor(self) -> Optional[float]:
+        """
+        Slider contribution among the top-weighted aim strains.
+
+        Only available for osu!.
+        """
+
+    @property
+    def speed_top_weighted_slider_factor(self) -> Optional[float]:
+        """
+        Slider contribution among the top-weighted speed strains.
+
+        Only available for osu!.
+        """
+
+    @property
     def speed_difficult_strain_count(self) -> Optional[float]:
         """
         Weighted sum of speed strains.
         
+        Only available for osu!.
+        """
+
+    @property
+    def reading_difficult_note_count(self) -> Optional[float]:
+        """
+        Weighted count of difficult reading notes.
+
+        Only available for osu!.
+        """
+
+    @property
+    def nested_score_per_object(self) -> Optional[float]:
+        """
+        Average legacy nested-object score per hit object.
+
+        Only available for osu!.
+        """
+
+    @property
+    def legacy_score_base_multiplier(self) -> Optional[float]:
+        """
+        Legacy score base multiplier used for score-based miss estimation.
+
+        Only available for osu!.
+        """
+
+    @property
+    def maximum_legacy_combo_score(self) -> Optional[float]:
+        """
+        Maximum legacy combo score for the calculated map section.
+
         Only available for osu!.
         """
 
@@ -909,22 +972,6 @@ class DifficultyAttributes:
         """
 
     @property
-    def single_color_stamina(self) -> Optional[float]:
-        """
-        The difficulty of the single color stamina skill.
-        
-        Only available for osu!taiko.
-        """
-
-    @property
-    def reading(self) -> Optional[float]:
-        """
-        The difficulty of the reading skill.
-        
-        Only available for osu!taiko.
-        """
-
-    @property
     def rhythm(self) -> Optional[float]:
         """
         The difficulty of the rhythm skill.
@@ -941,9 +988,9 @@ class DifficultyAttributes:
         """
 
     @property
-    def peak(self) -> Optional[float]:
+    def mono_stamina_factor(self) -> Optional[float]:
         """
-        The difficulty of the hardest parts of the map.
+        Ratio of mono-stamina difficulty to total stamina difficulty.
         
         Only available for osu!taiko.
         """
@@ -1068,6 +1115,14 @@ class PerformanceAttributes:
         """
 
     @property
+    def pp_reading(self) -> Optional[float]:
+        """
+        The reading portion of the final pp.
+
+        Only available for osu!.
+        """
+
+    @property
     def pp_accuracy(self) -> Optional[float]:
         """
         The accuracy portion of the final pp.
@@ -1081,6 +1136,38 @@ class PerformanceAttributes:
         Scaled miss count based on total hits.
         
         Only available for osu! and osu!taiko.
+        """
+
+    @property
+    def combo_based_estimated_miss_count(self) -> Optional[float]:
+        """
+        Miss count estimated from the achieved combo.
+
+        Only available for osu!.
+        """
+
+    @property
+    def score_based_estimated_miss_count(self) -> Optional[float]:
+        """
+        Miss count estimated from a supplied classic raw score.
+
+        Only optionally available for osu!.
+        """
+
+    @property
+    def aim_estimated_slider_breaks(self) -> Optional[float]:
+        """
+        Slider breaks estimated for the aim component.
+
+        Only available for osu!.
+        """
+
+    @property
+    def speed_estimated_slider_breaks(self) -> Optional[float]:
+        """
+        Slider breaks estimated for the speed component.
+
+        Only available for osu!.
         """
 
     @property
